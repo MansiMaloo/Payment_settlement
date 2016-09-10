@@ -1,0 +1,44 @@
+Problem Statement
+
+Every week, our company has to make payment settlements to different venue owners for the transactions (bookings and cancellations) through us that happen in the week. The settlement amount is calculated as (Total Amount through Bookings - Total amount through cancellations). Our company charges the venue owners a pre-determined commission on each transaction that happens through our systems (which can be identified using Payment type). The commission is charged only on the transactions marked as 'online payment'. An additional service tax is charged to the venue owners depending on whether the venue is within India or not. We want to create an automated reporting system, which will validate the input data (a list of transactions that happen over a period) and create a report to display the amounts transferred to different business owners for the provided time period, at a glance. We could use INR as a standard currency for all the transactions to begin with.
+
+NOTE: The commission and Service Charges are applicable on bookings as well as cancellations
+
+Various Applicable taxes and the rates are as follows:
+	Commission charged to the venue : 10%
+	Service Charge :
+		Venue in India : 5%
+		Venue NOT in India : 15%
+
+To calculate the amounts to be transferred for each venue, the program must read a list of parameters and transactions from a CSV file. The format of the CSV is as below.
+	The first line has the start date (yyyy-mm-dd) for which the settlement report is to be generated.
+	The second line has the end date (yyyy-mm-dd) for which the settlement report is to be generated.
+	From the third line, the CSV will contain a list of transactions having the following fields:
+		1) Transaction Id - Natural Number
+		2) Venue Id - starts with 'D' (within India) or 'I' (outside India), followed by a 3-digit number with no space in between
+		3) Transaction Type - 'BK (Booking) or 'CN' (cancellation)
+		4) Payment Type - 'OP' (Online Payment) or 'COA' (Cash on Arrival)
+		5) Transaction Date - yyyy-mm-dd format
+		6) Transaction Amount - Numeric
+
+After reading all invoices, the program should generate a settlement report (as a csv) in the structure below.
+VenueId | Net Settlement Amount | Commission | Service Charge | Net Transferred Amount
+
+Example:
+	Input - transactions.csv
+	2016-02-10
+	2016-02-18
+	1, D123, BK, OP, 2016-02-15, 1000
+	2, D111, CN, OP, 2016-02-12, 3000
+	3, D123, BK, COA, 2016-02-11, 1500
+	4, I111, BK, OP, 2016-02-24, 4000
+	5, I314, BK, OP, 2016-02-16, 3500
+	6, D123, BK, OP, 2016-02-01, 500
+	7, I111, CN, OP, 2016-02-11, 1000
+
+	Output:
+	VenueId, Net Settlement Amount, Commission, Service Charge, Net Transferred Amount
+	D123, 1000, 100, 50, 850
+	D111, -3000, 300, 150, -3450
+	I111, -1000, 100, 150, -1250
+	I314, 3500, 350, 525, 2625
